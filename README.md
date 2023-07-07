@@ -1,2 +1,4 @@
 # banHangFlutter
-app bán hàng bằng Flutter, server PHP ở localhost
+app bán hàng bằng Flutter,
+server PHP ở localhost
+
