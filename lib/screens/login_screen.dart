@@ -37,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // Obtain shared preferences.
       print('login ============> token');
       print(prefs.getString('token'));
-      await Navigator.popAndPushNamed(context, ScreenRoutes.screenHome);
+      await Navigator.popAndPushNamed(context, ScreenRoutes.screenRoot);
     } catch (error) {
       showDefaultAlert(context);
       if (error is dio.DioException) {
