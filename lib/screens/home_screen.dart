@@ -102,17 +102,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     size: 35,
                   ),
                   onPressed: () {
-                    _logout();
+                    print('home home');
                   },
                 ),
                 const SizedBox(width: 249),
                 IconButton(
                   icon: const Icon(
-                    Icons.filter_tilt_shift_sharp,
+                    Icons.logout,
                     color: Colors.white,
                     size: 35,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    _logout();
+                  },
                 ),
                 IconButton(
                   icon: const Icon(
@@ -120,7 +122,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.white,
                     size: 35,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    print('tap notification');
+                  },
                 )
               ],
             ),
@@ -217,97 +221,106 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisSpacing: 15,
                 ),
                 itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 23, 22, 22),
-                      border: Border.all(),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 10),
-                        SizedBox(
-                          width: 200,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Container(
-                              color: const Color.fromARGB(255, 38, 39, 40),
-                              child: Image.network(
-                                dummyData[index]['image_product'],
-                                height: 170,
-                                fit: BoxFit.contain,
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, ScreenRoutes.screenDetailProduct);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 23, 22, 22),
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            width: 200,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                color: const Color.fromARGB(255, 38, 39, 40),
+                                child: Image.network(
+                                  dummyData[index]['image_product'],
+                                  height: 170,
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 8.0, left: 13),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    dummyData[index]['name'],
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                          Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 8.0, left: 13),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      dummyData[index]['name'],
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 8.0, left: 13),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    dummyData[index]['name_category'],
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.white,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 8.0, left: 13),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      dummyData[index]['name_category'],
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 12),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '\$${dummyData[index]['price']}',
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 12),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '\$${dummyData[index]['price']}',
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.green,
-                                      border: Border.all(),
-                                      borderRadius: BorderRadius.circular(15),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.green,
+                                        border: Border.all(),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: IconButton(
+                                        color: Colors.white,
+                                        icon:
+                                            const Icon(Icons.add_shopping_cart),
+                                        onPressed: () {
+                                          print('add to cart');
+                                        },
+                                      ),
                                     ),
-                                    child: IconButton(
-                                      color: Colors.white,
-                                      icon: const Icon(Icons.add_shopping_cart),
-                                      onPressed: () {},
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -346,6 +359,10 @@ class _HomeScreenState extends State<HomeScreen> {
               itemCount: 3,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
+                  onTap: () {
+                    Navigator.pushNamed(
+                        context, ScreenRoutes.screenDetailProduct);
+                  },
                   title: Container(
                     decoration: BoxDecoration(
                       color: const Color.fromARGB(255, 23, 22, 22),
@@ -432,7 +449,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         color: Colors.white,
                                         icon:
                                             const Icon(Icons.add_shopping_cart),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          print('add to cart dưới');
+                                        },
                                       ),
                                     ),
                                   ],

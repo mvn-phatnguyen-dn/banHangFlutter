@@ -1,6 +1,8 @@
 import 'package:final_flutter_project/screen_routes.dart';
+import 'package:final_flutter_project/screens/detail_product.dart';
 import 'package:final_flutter_project/screens/home_screen.dart';
 import 'package:final_flutter_project/screens/login_screen.dart';
+import 'package:final_flutter_project/screens/root_screen.dart';
 import 'package:final_flutter_project/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,11 +21,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final SharedPreferences prefs = SharedPreferencesService().prefs;
     return MaterialApp(
-      home: prefs.getString('token') == null ? LoginScreen() : HomeScreen(),
+      home: prefs.getString('token') == null ? LoginScreen() : RootScreen(),
       routes: {
+        ScreenRoutes.screenRoot: (context) => const RootScreen(),
         ScreenRoutes.screenHome: (context) => const HomeScreen(),
         ScreenRoutes.screenLogin: (context) => const LoginScreen(),
         ScreenRoutes.screenSignup: (context) => const SignupScreen(),
+        ScreenRoutes.screenDetailProduct: (context) =>
+            const DetailProductScreen(),
       },
     );
   }
