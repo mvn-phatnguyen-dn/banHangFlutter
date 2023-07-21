@@ -5,6 +5,7 @@ import 'package:retrofit/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../common/shared_preferences_service.dart';
+import 'response/list_product_response.dart';
 
 part 'api_service.g.dart';
 
@@ -29,4 +30,7 @@ abstract class ApiService {
 
   @POST('/logout')
   Future<LogoutResponse> logout();
+
+  @GET('/product')
+  Future<ListProductResponse> getListProduct();
 }
