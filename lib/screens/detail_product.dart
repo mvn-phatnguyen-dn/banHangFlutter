@@ -1,8 +1,10 @@
 import 'package:final_flutter_project/components/text_field.dart';
+import 'package:final_flutter_project/network/entity/product_entity.dart';
 import 'package:final_flutter_project/screen_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as dio;
 import '../network/api_service.dart';
+import '../network/response/add_to_cart_input_model.dart';
 
 class DetailProductScreen extends StatefulWidget {
   const DetailProductScreen({super.key});
@@ -13,34 +15,54 @@ class DetailProductScreen extends StatefulWidget {
 
 class _DetailProductScreenState extends State<DetailProductScreen> {
   final _searchplantController = TextEditingController();
-  int _currentIndex = 0;
+
   ApiService apiService = ApiService(dio.Dio());
 
-  Future<void> _logout() async {
-    try {
-      final response = await apiService.logout();
-      print('============> logout');
-      await prefs.remove('token');
-      await Navigator.popAndPushNamed(context, ScreenRoutes.screenLogin);
-    } catch (error) {
-      showDefaultAlert(context);
-      if (error is dio.DioException) {
-        if (error.response?.statusCode == 400) {
-          // Xử lý lỗi 400
-        } else if (error.response?.statusCode == 401) {
-          // Xử lý lỗi 401
-        }
-        // Xử lý các lỗi khác
-      } else {
-        // Xử lý các lỗi khác
-      }
-    }
+  Future<void> _addToCart() async {
+    final response =
+        await apiService.addToCart(10, AddToCartInputModel(quantity: 11));
+    print(response);
+    // try {
+    //   final response =
+    //       await apiService.addToCart(10, AddToCartInputModel(quantity: 11));
+    //   showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return AlertDialog(
+    //         title: const Text('Alert'),
+    //         content: const Text('Added to cart!'),
+    //         actions: [
+    //           TextButton(
+    //             onPressed: () {
+    //               Navigator.of(context).pop();
+    //             },
+    //             child: const Text('OK'),
+    //           ),
+    //         ],
+    //       );
+    //     },
+    //   );
+    // } catch (error) {
+    //   showDefaultAlert(context);
+    //   if (error is dio.DioException) {
+    //     if (error.response?.statusCode == 400) {
+    //       // Xử lý lỗi 400
+    //     } else if (error.response?.statusCode == 401) {
+    //       // Xử lý lỗi 401
+    //     }
+    //     // Xử lý các lỗi khác
+    //   } else {
+    //     // Xử lý các lỗi khác
+    //   }
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
+    final ProductEntity item =
+        ModalRoute.of(context)!.settings.arguments as ProductEntity;
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 38, 39, 40),
+      backgroundColor: Colors.black,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -61,7 +83,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
             ),
             const SizedBox(height: 25),
             Image.network(
-              'http://localhost:8000/storage/shop/product/1666972892_extract_1.png',
+              item.imageProduct,
               height: 300,
               width: 300,
               fit: BoxFit.cover,
@@ -74,14 +96,14 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                 children: [
                   Text(
                     style: TextStyle(color: Colors.white, fontSize: 20),
-                    'Name of Product',
+                    item.name,
                   ),
                   Row(children: [
                     Text(
                         style: TextStyle(
                           color: Colors.white,
                         ),
-                        '146 reviewers'),
+                        '${item.view} reviewers'),
                   ]),
                   SizedBox(
                     height: 10,
@@ -90,7 +112,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                     style: TextStyle(
                       color: Colors.white,
                     ),
-                    'chi tiết product chi tiết product chi tiết product chi tiết product chi tiết product chi tiết product chi tiết product chi tiết product chi tiết product chi tiết product chi tiết product',
+                    item.content,
                   ),
                   TextButton(
                       onPressed: () {},
@@ -112,12 +134,12 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
-                                'Read more'),
+                                'Code'),
                             Text(
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
-                                'read more')
+                                '${item.categoryId}')
                           ],
                         ),
                       ),
@@ -132,12 +154,12 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
-                                'Read more'),
+                                'Discount'),
                             Text(
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
-                                'read more')
+                                '${item.discount} %')
                           ],
                         ),
                       ),
@@ -152,12 +174,12 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
-                                'Read more'),
+                                'Date create'),
                             Text(
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
-                                'read more')
+                                '${item.createdAt.split('T').first}')
                           ],
                         ),
                       ),
@@ -172,12 +194,12 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
-                                'Read more'),
+                                'Date update'),
                             Text(
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
-                                'read more')
+                                '${item.updatedAt.split('T').first}')
                           ],
                         ),
                       ),
@@ -189,36 +211,39 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                           style: TextStyle(
                             color: Colors.white,
                           ),
-                          '60000vnd'),
+                          ' price: '),
+                      Text(
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 6, 166, 14),
+                              fontSize: 30),
+                          '${item.price}\$'),
                       TextButton(
                         onPressed: () {},
                         child: Text(
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
+                            style: TextStyle(color: Colors.white, fontSize: 40),
                             '-'),
                       ),
                       Text(
                           style: TextStyle(
-                            color: Colors.white,
-                          ),
+                              color: Color.fromARGB(255, 161, 3, 3),
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold),
                           '11'),
                       TextButton(
                         onPressed: () {},
                         child: Text(
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
+                            style: TextStyle(color: Colors.white, fontSize: 30),
                             '+'),
                       ),
                     ],
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   GestureDetector(
                     onTap: () {
                       print('add to cart detail');
+                      _addToCart();
                     },
                     child: Container(
                       color: Colors.green,

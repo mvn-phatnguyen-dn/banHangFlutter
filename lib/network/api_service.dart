@@ -5,6 +5,8 @@ import 'package:retrofit/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../common/shared_preferences_service.dart';
+import 'response/add_to_cart_input_model.dart';
+import 'response/add_to_cart_response.dart';
 import 'response/list_product_response.dart';
 
 part 'api_service.g.dart';
@@ -33,4 +35,10 @@ abstract class ApiService {
 
   @GET('/product')
   Future<ListProductResponse> getListProduct();
+
+  @POST('/cart/add/')
+  Future<AddToCartResponse> addToCart(
+    @Path() int id,
+    @Body() AddToCartInputModel input,
+  );
 }
