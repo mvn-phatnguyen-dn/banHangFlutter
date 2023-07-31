@@ -11,9 +11,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final _searchplantController = TextEditingController();
-  int _currentIndex = 0;
-
   ApiService apiService = ApiService(dio.Dio());
 
   Future<void> _logout() async {
@@ -96,21 +93,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       height: 5,
                     ),
                     Text(
-                      'Phatd',
+                      prefs.getString('userName') ?? 'no_name',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    SizedBox(
+                      height: 3,
+                    ),
                     Text(
-                      "Phatd@gmail.com",
+                      prefs.getString('userPhone') ?? 'no_phone',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
-                    )
+                    ),
+                    SizedBox(
+                      height: 3,
+                    ),
+                    Text(
+                      prefs.getString('address') ?? 'no_address',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 )
               ],

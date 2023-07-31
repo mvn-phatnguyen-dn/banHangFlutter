@@ -1,5 +1,4 @@
-import 'package:final_flutter_project/components/text_field.dart';
-import 'package:final_flutter_project/screen_routes.dart';
+import 'package:final_flutter_project/network/entity/cart_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as dio;
 import '../network/api_service.dart';
@@ -12,57 +11,126 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  final _searchplantController = TextEditingController();
-  int _currentIndex = 0;
   ApiService apiService = ApiService(dio.Dio());
+  List<CartEntity> data = [];
+  int totalAmount = 0;
 
-  List<Map<String, dynamic>> dummyData = [
-    {
-      "id": 16,
-      "category_id": 12,
-      "name": "Santal Royal",
-      "name_category": "Perfume",
-      "image_product":
-          "http://localhost:8000/storage/shop/product/1666973112_santal_royal_1.png",
-      "discount": 0,
-      "content":
-          "When you're flying across the field or sprinting around the track, you can't afford to have hair block your view. This adidas headband comes to the rescue with breathable fabric that's stretchy and moisture-proof. Tie it at the back, and be on your way.",
-      "price": 8,
-      "view": 0,
-      "created_at": "2022-10-28T14:54:09.000000Z",
-      "updated_at": "2022-10-28T14:54:09.000000Z"
-    },
-    {
-      "id": 16,
-      "category_id": 12,
-      "name": "Alphaskin Tie",
-      "name_category": "Perfume",
-      "image_product":
-          "http://localhost:8000/storage/shop/product/1666973055_samsara_1.png",
-      "discount": 0,
-      "content":
-          "When you're flying across the field or sprinting around the track, you can't afford to have hair block your view. This adidas headband comes to the rescue with breathable fabric that's stretchy and moisture-proof. Tie it at the back, and be on your way.",
-      "price": 20,
-      "view": 0,
-      "created_at": "2022-10-28T14:54:09.000000Z",
-      "updated_at": "2022-10-28T14:54:09.000000Z"
-    },
-    {
-      "id": 16,
-      "category_id": 12,
-      "name": "Samsara",
-      "name_category": "Perfume",
-      "image_product":
-          "http://localhost:8000/storage/shop/product/1666972892_extract_1.png",
-      "discount": 0,
-      "content":
-          "When you're flying across the field or sprinting around the track, you can't afford to have hair block your view. This adidas headband comes to the rescue with breathable fabric that's stretchy and moisture-proof. Tie it at the back, and be on your way.",
-      "price": 15,
-      "view": 0,
-      "created_at": "2022-10-28T14:54:09.000000Z",
-      "updated_at": "2022-10-28T14:54:09.000000Z"
-    },
-  ];
+  Future<void> _createTransaction() async {
+    try {
+      print(data.map((e) => e.id).toList());
+      print(prefs.getString('userName'));
+      print(prefs.getString('userPhone'));
+      print(prefs.getString('address'));
+      print(totalAmount);
+      print(prefs.getString('password'));
+      final response = await apiService.createTransaction({
+        "orders": data.map((e) => e.id).toList(),
+        "user_name": prefs.getString('userName') ?? 'no_userName',
+        "user_phone": prefs.getString('userPhone') ?? 'no_userPhone',
+        "address": prefs.getString('address') ?? 'no_address',
+        "amount": totalAmount,
+        "password": prefs.getString('address') ?? 'no_password',
+      });
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Alert'),
+            content: Text(response.data.toString()),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    data = [];
+                  });
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } catch (error) {
+      showDefaultAlert(context);
+      if (error is dio.DioException) {
+        if (error.response?.statusCode == 400) {
+          // Xử lý lỗi 400
+        } else if (error.response?.statusCode == 401) {
+          // Xử lý lỗi 401
+        }
+        // Xử lý các lỗi khác
+      } else {
+        // Xử lý các lỗi khác
+      }
+    }
+  }
+
+  Future<void> _deleteCartItem(String id) async {
+    try {
+      final response = await apiService.deleteItemCart(id);
+      _getCart();
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Alert'),
+            content: Text(response.data.toString()),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } catch (error) {
+      showDefaultAlert(context);
+      if (error is dio.DioException) {
+        if (error.response?.statusCode == 400) {
+          // Xử lý lỗi 400
+        } else if (error.response?.statusCode == 401) {
+          // Xử lý lỗi 401
+        }
+        // Xử lý các lỗi khác
+      } else {
+        // Xử lý các lỗi khác
+      }
+    }
+  }
+
+  Future<void> _getCart() async {
+    try {
+      final response = await apiService.getCart();
+      setState(() {
+        data = response.allCartEntity;
+        totalAmount = data
+            .map((e) => e.price * e.quantity)
+            .reduce((value, element) => (value + element));
+      });
+    } catch (error) {
+      showDefaultAlert(context);
+      if (error is dio.DioException) {
+        if (error.response?.statusCode == 400) {
+          // Xử lý lỗi 400
+        } else if (error.response?.statusCode == 401) {
+          // Xử lý lỗi 401
+        }
+        // Xử lý các lỗi khác
+      } else {
+        // Xử lý các lỗi khác
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    _getCart();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +160,7 @@ class _CartScreenState extends State<CartScreen> {
               shrinkWrap: true,
               padding: EdgeInsets.zero,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: 3,
+              itemCount: data.length,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
                   title: Container(
@@ -113,7 +181,7 @@ class _CartScreenState extends State<CartScreen> {
                               child: Container(
                                 color: const Color.fromARGB(255, 38, 39, 40),
                                 child: Image.network(
-                                  dummyData[index]['image_product'],
+                                  data[index].imageProduct,
                                   fit: BoxFit.contain,
                                 ),
                               ),
@@ -131,7 +199,7 @@ class _CartScreenState extends State<CartScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      dummyData[index]['name'],
+                                      data[index].productName,
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 15,
@@ -147,7 +215,7 @@ class _CartScreenState extends State<CartScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      dummyData[index]['name_category'],
+                                      data[index].createdAt.split('T').first,
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 15,
@@ -164,7 +232,7 @@ class _CartScreenState extends State<CartScreen> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      '\$${dummyData[index]['price']}',
+                                      '\$${data[index].price}',
                                       style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
@@ -181,6 +249,8 @@ class _CartScreenState extends State<CartScreen> {
                                         color: Colors.red,
                                         icon: const Icon(Icons.delete),
                                         onPressed: () {
+                                          _deleteCartItem(
+                                              data[index].id.toString());
                                           print('xoá sản phẩm');
                                         },
                                       ),
@@ -205,7 +275,7 @@ class _CartScreenState extends State<CartScreen> {
                                       width: 20,
                                     ),
                                     Text(
-                                      '10',
+                                      data[index].quantity.toString(),
                                       style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
@@ -243,7 +313,7 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                       ),
                       Text(
-                        '1350000 vnd',
+                        '${totalAmount} dollar',
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -322,7 +392,7 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                       ),
                       Text(
-                        '15%',
+                        '0%',
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -346,7 +416,7 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                       ),
                       Text(
-                        '5000 vnd',
+                        '0 dollar',
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -371,7 +441,7 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                       ),
                       Text(
-                        '1800000 vnd',
+                        '${totalAmount} dollar',
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -395,7 +465,9 @@ class _CartScreenState extends State<CartScreen> {
                       minimumSize:
                           MaterialStateProperty.all<Size>(const Size(360, 60)),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      _createTransaction();
+                    },
                     child: const Text(
                       'Pay Now',
                       style: TextStyle(fontSize: 18),

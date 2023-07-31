@@ -40,10 +40,38 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _getInfoUser() async {
+    try {
+      final response = await apiService.infoUser();
+      await prefs.setString('userName', response.infoUserEntity.userName);
+      await prefs.setString('userPhone', response.infoUserEntity.phoneNumber);
+      await prefs.setString('address', response.infoUserEntity.address);
+      await prefs.setString('password', 'Phat123');
+      print(prefs.getString('userName'));
+      print(prefs.getString('userPhone'));
+      print(prefs.getString('address'));
+      print(prefs.getString('password'));
+    } catch (error) {
+      showDefaultAlert(context);
+      if (error is dio.DioException) {
+        if (error.response?.statusCode == 400) {
+          // Xử lý lỗi 400
+        } else if (error.response?.statusCode == 401) {
+          // Xử lý lỗi 401
+        }
+        // Xử lý các lỗi khác
+      } else {
+        // Xử lý các lỗi khác
+      }
+    }
+  }
+
   Future<void> _getListProduct() async {
     try {
       final response = await apiService.getListProduct();
-      listProduct = response.listProductEntity;
+      setState(() {
+        listProduct = response.listProductEntity;
+      });
     } catch (error) {
       showDefaultAlert(context);
       if (error is dio.DioException) {
@@ -62,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     _getListProduct();
+    _getInfoUser();
     super.initState();
   }
 
