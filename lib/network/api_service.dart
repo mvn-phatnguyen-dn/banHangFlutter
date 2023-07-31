@@ -36,9 +36,7 @@ abstract class ApiService {
   @GET('/product')
   Future<ListProductResponse> getListProduct();
 
-  @POST('/cart/add/')
+  @POST('/cart/add/{id}')
   Future<AddToCartResponse> addToCart(
-    @Path() int id,
-    @Body() AddToCartInputModel input,
-  );
+      @Path() String id, @Body() Map<String, dynamic> body);
 }
