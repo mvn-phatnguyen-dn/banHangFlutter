@@ -93,13 +93,13 @@ class _ApiService implements ApiService {
   @override
   Future<AddToCartResponse> addToCart(
     id,
-    input,
+    body,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(input.toJson());
+    _data.addAll(body);
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<AddToCartResponse>(Options(
       method: 'POST',

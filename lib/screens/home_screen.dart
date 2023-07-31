@@ -10,7 +10,6 @@ class HomeScreen extends StatefulWidget {
 
   @override
   State<HomeScreen> createState() {
-    // _getListProduct();
     return _HomeScreenState();
   }
 }
@@ -60,54 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // List<Map<String, dynamic>> dummyData = [
-  //   {
-  //     "id": 16,
-  //     "category_id": 12,
-  //     "name": "Santal Royal",
-  //     "name_category": "Perfume",
-  //     "image_product":
-  //         "http://localhost:8000/storage/shop/product/1666973112_santal_royal_1.png",
-  //     "discount": 0,
-  //     "content":
-  //         "When you're flying across the field or sprinting around the track, you can't afford to have hair block your view. This adidas headband comes to the rescue with breathable fabric that's stretchy and moisture-proof. Tie it at the back, and be on your way.",
-  //     "price": 8,
-  //     "view": 0,
-  //     "created_at": "2022-10-28T14:54:09.000000Z",
-  //     "updated_at": "2022-10-28T14:54:09.000000Z"
-  //   },
-  //   {
-  //     "id": 16,
-  //     "category_id": 12,
-  //     "name": "Alphaskin Tie",
-  //     "name_category": "Perfume",
-  //     "image_product":
-  //         "http://localhost:8000/storage/shop/product/1666973055_samsara_1.png",
-  //     "discount": 0,
-  //     "content":
-  //         "When you're flying across the field or sprinting around the track, you can't afford to have hair block your view. This adidas headband comes to the rescue with breathable fabric that's stretchy and moisture-proof. Tie it at the back, and be on your way.",
-  //     "price": 20,
-  //     "view": 0,
-  //     "created_at": "2022-10-28T14:54:09.000000Z",
-  //     "updated_at": "2022-10-28T14:54:09.000000Z"
-  //   },
-  //   {
-  //     "id": 16,
-  //     "category_id": 12,
-  //     "name": "Samsara",
-  //     "name_category": "Perfume",
-  //     "image_product":
-  //         "http://localhost:8000/storage/shop/product/1666972892_extract_1.png",
-  //     "discount": 0,
-  //     "content":
-  //         "When you're flying across the field or sprinting around the track, you can't afford to have hair block your view. This adidas headband comes to the rescue with breathable fabric that's stretchy and moisture-proof. Tie it at the back, and be on your way.",
-  //     "price": 15,
-  //     "view": 0,
-  //     "created_at": "2022-10-28T14:54:09.000000Z",
-  //     "updated_at": "2022-10-28T14:54:09.000000Z"
-  //   },
-  // ];
-
   @override
   void initState() {
     _getListProduct();
@@ -116,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // _getListProduct();
     return Scaffold(
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
@@ -463,7 +415,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      '\$${listProduct[index].price}',
+                                      '\$${listProduct[index].price}' ?? '',
                                       style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,

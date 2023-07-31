@@ -15,52 +15,50 @@ class DetailProductScreen extends StatefulWidget {
 
 class _DetailProductScreenState extends State<DetailProductScreen> {
   final _searchplantController = TextEditingController();
+  late ProductEntity item;
+  int numberProducts = 1;
 
   ApiService apiService = ApiService(dio.Dio());
 
   Future<void> _addToCart() async {
-    final response =
-        await apiService.addToCart(10, AddToCartInputModel(quantity: 11));
-    print(response);
-    // try {
-    //   final response =
-    //       await apiService.addToCart(10, AddToCartInputModel(quantity: 11));
-    //   showDialog(
-    //     context: context,
-    //     builder: (BuildContext context) {
-    //       return AlertDialog(
-    //         title: const Text('Alert'),
-    //         content: const Text('Added to cart!'),
-    //         actions: [
-    //           TextButton(
-    //             onPressed: () {
-    //               Navigator.of(context).pop();
-    //             },
-    //             child: const Text('OK'),
-    //           ),
-    //         ],
-    //       );
-    //     },
-    //   );
-    // } catch (error) {
-    //   showDefaultAlert(context);
-    //   if (error is dio.DioException) {
-    //     if (error.response?.statusCode == 400) {
-    //       // Xử lý lỗi 400
-    //     } else if (error.response?.statusCode == 401) {
-    //       // Xử lý lỗi 401
-    //     }
-    //     // Xử lý các lỗi khác
-    //   } else {
-    //     // Xử lý các lỗi khác
-    //   }
-    // }
+    try {
+      final response = await apiService
+          .addToCart('${item.id}', {'quantity': numberProducts});
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Alert'),
+            content: Text(response.data.toString()),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } catch (error) {
+      showDefaultAlert(context);
+      if (error is dio.DioException) {
+        if (error.response?.statusCode == 400) {
+          // Xử lý lỗi 400
+        } else if (error.response?.statusCode == 401) {
+          // Xử lý lỗi 401
+        }
+        // Xử lý các lỗi khác
+      } else {
+        // Xử lý các lỗi khác
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final ProductEntity item =
-        ModalRoute.of(context)!.settings.arguments as ProductEntity;
+    item = ModalRoute.of(context)!.settings.arguments as ProductEntity;
     return Scaffold(
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
@@ -216,9 +214,15 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                           style: TextStyle(
                               color: Color.fromARGB(255, 6, 166, 14),
                               fontSize: 30),
-                          '${item.price}\$'),
+                          '${item.price * numberProducts}\$'),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          if (numberProducts > 1) {
+                            setState(() {
+                              numberProducts -= 1;
+                            });
+                          }
+                        },
                         child: Text(
                             style: TextStyle(color: Colors.white, fontSize: 40),
                             '-'),
@@ -228,9 +232,13 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                               color: Color.fromARGB(255, 161, 3, 3),
                               fontSize: 30,
                               fontWeight: FontWeight.bold),
-                          '11'),
+                          numberProducts.toString()),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            numberProducts += 1;
+                          });
+                        },
                         child: Text(
                             style: TextStyle(color: Colors.white, fontSize: 30),
                             '+'),
