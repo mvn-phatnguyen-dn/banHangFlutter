@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:final_flutter_project/network/response/cart_response.dart';
+import 'package:final_flutter_project/network/response/info_user_response.dart';
 import 'package:final_flutter_project/network/response/login_response.dart';
 import 'package:final_flutter_project/network/response/logout_response.dart';
 import 'package:retrofit/http.dart';
@@ -39,4 +41,17 @@ abstract class ApiService {
   @POST('/cart/add/{id}')
   Future<AddToCartResponse> addToCart(
       @Path() String id, @Body() Map<String, dynamic> body);
+
+  @GET('/cart')
+  Future<CartResponse> getCart();
+
+  @DELETE('/cart/delete/{id}')
+  Future<AddToCartResponse> deleteItemCart(@Path() String id);
+
+  @POST('/transaction/create')
+  Future<AddToCartResponse> createTransaction(
+      @Body() Map<String, dynamic> body);
+
+  @GET('/infoUser')
+  Future<InfoUserResponse> infoUser();
 }
