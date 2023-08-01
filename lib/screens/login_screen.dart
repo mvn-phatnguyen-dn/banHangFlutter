@@ -14,6 +14,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  ApiService apiService = ApiService(dio.Dio());
+
   bool obscureText = false;
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -24,11 +26,10 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = _passwordController.text;
 
     final Map<String, dynamic> loginData = {
-      'email': 'Phatd@gmail.com',
-      'password': 'Phat123'
+      'email': username,
+      'password': password
     };
 
-    ApiService apiService = ApiService(dio.Dio());
     try {
       final response = await apiService.login(loginData);
       await prefs.setString('token',

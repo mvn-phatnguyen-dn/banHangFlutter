@@ -1,6 +1,7 @@
 import 'package:final_flutter_project/components/text_field.dart';
-import 'package:final_flutter_project/screen_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart' as dio;
+import '../network/api_service.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -10,13 +11,67 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  ApiService apiService = ApiService(dio.Dio());
+
   bool obscureText = true;
   bool isChecked = false;
-  final _firstnameController = TextEditingController();
-  final _lastnameController = TextEditingController();
-  final _emailadressController = TextEditingController();
+  final _userNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
+  final _addressController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _confirmpasswordController = TextEditingController();
+
+  Future<void> _register() async {
+    final userName = _userNameController.text;
+    final email = _emailController.text;
+    final phone = _phoneNumberController.text;
+    final address = _addressController.text;
+    final password = _passwordController.text;
+
+    final Map<String, dynamic> registerData = {
+      "user_name": userName,
+      "email": email,
+      "gender": 0,
+      "phone_number": phone,
+      "address": address,
+      "bithday": "10-10-1995",
+      "password": password
+    };
+
+    try {
+      final response = await apiService.register(registerData);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Alert'),
+            content: Text(response.success.toString()),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } catch (error) {
+      showDefaultAlert(context);
+      if (error is dio.DioException) {
+        if (error.response?.statusCode == 400) {
+          // Xử lý lỗi 400
+        } else if (error.response?.statusCode == 401) {
+          // Xử lý lỗi 401
+        }
+        // Xử lý các lỗi khác
+      } else {
+        // Xử lý các lỗi khác
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,9 +137,9 @@ class _SignupScreenState extends State<SignupScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 17, right: 17),
               child: CustomTextField(
-                controller: _firstnameController,
+                controller: _userNameController,
                 decoration: InputDecoration(
-                  hintText: 'First Name',
+                  hintText: 'User Name',
                   hintStyle: const TextStyle(
                     color: Colors.green,
                     fontSize: 18,
@@ -111,9 +166,9 @@ class _SignupScreenState extends State<SignupScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 15, left: 17, right: 17),
               child: CustomTextField(
-                controller: _lastnameController,
+                controller: _emailController,
                 decoration: InputDecoration(
-                  hintText: 'Last Name',
+                  hintText: 'Email',
                   hintStyle: const TextStyle(
                     color: Colors.green,
                     fontSize: 18,
@@ -140,9 +195,38 @@ class _SignupScreenState extends State<SignupScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 15, left: 17, right: 17),
               child: CustomTextField(
-                controller: _emailadressController,
+                controller: _phoneNumberController,
                 decoration: InputDecoration(
-                  hintText: 'Email Address',
+                  hintText: 'Phone Number',
+                  hintStyle: const TextStyle(
+                    color: Colors.green,
+                    fontSize: 18,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: const BorderSide(
+                      color: Colors.green,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: const BorderSide(
+                      color: Colors.green,
+                    ),
+                  ),
+                ),
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
+                obscureText: false,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15, left: 17, right: 17),
+              child: CustomTextField(
+                controller: _addressController,
+                decoration: InputDecoration(
+                  hintText: 'Address',
                   hintStyle: const TextStyle(
                     color: Colors.green,
                     fontSize: 18,
@@ -172,48 +256,6 @@ class _SignupScreenState extends State<SignupScreen> {
                 controller: _passwordController,
                 decoration: InputDecoration(
                   hintText: 'Password',
-                  hintStyle: const TextStyle(
-                    color: Colors.green,
-                    fontSize: 18,
-                  ),
-                  suffixIcon: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        obscureText = !obscureText;
-                      });
-                    },
-                    child: Icon(
-                      obscureText
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                      color: Colors.white,
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(
-                      color: Colors.green,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(
-                      color: Colors.green,
-                    ),
-                  ),
-                ),
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
-                obscureText: obscureText,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 15, left: 17, right: 17),
-              child: CustomTextField(
-                controller: _confirmpasswordController,
-                decoration: InputDecoration(
-                  hintText: 'Confirm Password',
                   hintStyle: const TextStyle(
                     color: Colors.green,
                     fontSize: 18,
@@ -308,7 +350,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 minimumSize:
                     MaterialStateProperty.all<Size>(const Size(360, 60)),
               ),
-              onPressed: () {},
+              onPressed: () {
+                _register();
+              },
               child: const Text(
                 'Register',
                 style: TextStyle(fontSize: 18),
@@ -370,4 +414,24 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
     );
   }
+}
+
+void showDefaultAlert(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Alert'),
+        content: Text('Register is error.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
 }

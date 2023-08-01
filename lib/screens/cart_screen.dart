@@ -112,7 +112,23 @@ class _CartScreenState extends State<CartScreen> {
             .reduce((value, element) => (value + element));
       });
     } catch (error) {
-      showDefaultAlert(context);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Alert'),
+            content: Text('Your Cart is Empty'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
       if (error is dio.DioException) {
         if (error.response?.statusCode == 400) {
           // Xử lý lỗi 400
