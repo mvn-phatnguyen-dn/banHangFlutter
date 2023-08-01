@@ -214,7 +214,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                           style: TextStyle(
                               color: Color.fromARGB(255, 6, 166, 14),
                               fontSize: 30),
-                          '${item.price * numberProducts}\$'),
+                          ' ${item.price}\$'),
                       TextButton(
                         onPressed: () {
                           if (numberProducts > 1) {
@@ -267,8 +267,8 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                               style: TextStyle(
                                 color: Colors.white,
                               ),
-                              'Add To Cart'),
-                          SizedBox(width: 50),
+                              'Add'),
+                          SizedBox(width: 15),
                           Container(
                             width: 2,
                             color: Colors.amber,
@@ -277,10 +277,9 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                             width: 10,
                           ),
                           Text(
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                              '60000 vnd')
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 30),
+                              'Total: ${item.price * numberProducts} dollar')
                         ],
                       ),
                     ),

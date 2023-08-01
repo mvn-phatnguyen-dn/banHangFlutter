@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:final_flutter_project/network/response/cart_response.dart';
 import 'package:final_flutter_project/network/response/info_user_response.dart';
+import 'package:final_flutter_project/network/response/list_transaction_response.dart';
 import 'package:final_flutter_project/network/response/login_response.dart';
 import 'package:final_flutter_project/network/response/logout_response.dart';
 import 'package:retrofit/http.dart';
@@ -32,6 +33,9 @@ abstract class ApiService {
   @POST('/login')
   Future<LoginResponse> login(@Body() Map<String, dynamic> body);
 
+  @POST('/register')
+  Future<LogoutResponse> register(@Body() Map<String, dynamic> body);
+
   @POST('/logout')
   Future<LogoutResponse> logout();
 
@@ -54,4 +58,7 @@ abstract class ApiService {
 
   @GET('/infoUser')
   Future<InfoUserResponse> infoUser();
+
+  @POST('/transaction')
+  Future<ListTransactionResponse> getListTransaction();
 }

@@ -96,7 +96,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // _getListProduct();
     return Scaffold(
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
@@ -224,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 300,
               child: GridView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 10,
+                itemCount: listProduct.length % 15,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   childAspectRatio: 4 / 3,
                   crossAxisCount: 1,
@@ -269,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      listProduct[index].name,
+                                      listProduct[index].name.split(' ').first,
                                       style: const TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
@@ -367,7 +366,7 @@ class _HomeScreenState extends State<HomeScreen> {
               shrinkWrap: true,
               padding: EdgeInsets.zero,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: 5,
+              itemCount: listProduct.length % 13,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
                   onTap: () {
@@ -411,7 +410,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      listProduct[index].name,
+                                      listProduct[index].name.split(' ').first,
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 15,
