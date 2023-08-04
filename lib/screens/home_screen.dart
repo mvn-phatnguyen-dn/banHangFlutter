@@ -1,5 +1,6 @@
 import 'package:final_flutter_project/components/text_field.dart';
 import 'package:final_flutter_project/screen_routes.dart';
+import 'package:final_flutter_project/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as dio;
 import '../network/api_service.dart';
@@ -19,27 +20,6 @@ class _HomeScreenState extends State<HomeScreen> {
   List<ProductEntity> listProduct = [];
   ApiService apiService = ApiService(dio.Dio());
 
-  Future<void> _logout() async {
-    try {
-      final response = await apiService.logout();
-      print('============> logout');
-      await prefs.remove('token');
-      await Navigator.popAndPushNamed(context, ScreenRoutes.screenLogin);
-    } catch (error) {
-      showDefaultAlert(context);
-      if (error is dio.DioException) {
-        if (error.response?.statusCode == 400) {
-          // Xử lý lỗi 400
-        } else if (error.response?.statusCode == 401) {
-          // Xử lý lỗi 401
-        }
-        // Xử lý các lỗi khác
-      } else {
-        // Xử lý các lỗi khác
-      }
-    }
-  }
-
   Future<void> _getInfoUser() async {
     try {
       final response = await apiService.infoUser();
@@ -53,16 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
       print(prefs.getString('password'));
     } catch (error) {
       showDefaultAlert(context);
-      if (error is dio.DioException) {
-        if (error.response?.statusCode == 400) {
-          // Xử lý lỗi 400
-        } else if (error.response?.statusCode == 401) {
-          // Xử lý lỗi 401
-        }
-        // Xử lý các lỗi khác
-      } else {
-        // Xử lý các lỗi khác
-      }
     }
   }
 
@@ -74,16 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     } catch (error) {
       showDefaultAlert(context);
-      if (error is dio.DioException) {
-        if (error.response?.statusCode == 400) {
-          // Xử lý lỗi 400
-        } else if (error.response?.statusCode == 401) {
-          // Xử lý lỗi 401
-        }
-        // Xử lý các lỗi khác
-      } else {
-        // Xử lý các lỗi khác
-      }
     }
   }
 
@@ -117,12 +77,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(width: 249),
                 IconButton(
                   icon: const Icon(
-                    Icons.logout,
+                    Icons.search,
                     color: Colors.white,
                     size: 35,
                   ),
                   onPressed: () {
-                    _logout();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SearchScreen(items: listProduct),
+                      ),
+                    );
                   },
                 ),
                 IconButton(
@@ -490,7 +455,7 @@ void showDefaultAlert(BuildContext context) {
     builder: (BuildContext context) {
       return AlertDialog(
         title: const Text('Alert'),
-        content: const Text('This is a default alert.'),
+        content: const Text('API has error.'),
         actions: [
           TextButton(
             onPressed: () {
