@@ -282,10 +282,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       child: IconButton(
                                         color: Colors.white,
-                                        icon:
-                                            const Icon(Icons.add_shopping_cart),
-                                        onPressed: () {
-                                          print('add to cart');
+                                        icon: const Icon(Icons.heart_broken),
+                                        onPressed: () async {
+                                          print('add to favorite');
+                                          List<String> listFavoriteId =
+                                              prefs.getStringList('favorite')!;
+                                          listFavoriteId.add(
+                                              listProduct[index].id.toString());
+                                          print(listFavoriteId);
+                                          await prefs.setStringList(
+                                              'favorite', listFavoriteId);
                                         },
                                       ),
                                     ),
@@ -423,10 +429,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       child: IconButton(
                                         color: Colors.white,
-                                        icon:
-                                            const Icon(Icons.add_shopping_cart),
-                                        onPressed: () {
+                                        icon: const Icon(Icons.heart_broken),
+                                        onPressed: () async {
                                           print('add to cart dưới');
+                                          List<String> listFavoriteId =
+                                              prefs.getStringList('favorite')!;
+                                          listFavoriteId.add(
+                                              listProduct[index].id.toString());
+                                          print(listFavoriteId);
+                                          await prefs.setStringList(
+                                              'favorite', listFavoriteId);
                                         },
                                       ),
                                     ),

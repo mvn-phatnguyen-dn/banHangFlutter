@@ -1,5 +1,6 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:final_flutter_project/screens/cart_screen.dart';
+import 'package:final_flutter_project/screens/favorite_screen.dart';
 import 'package:final_flutter_project/screens/home_screen.dart';
 import 'package:final_flutter_project/screens/order_history_screen.dart';
 import 'package:final_flutter_project/screens/profile_screen.dart';
@@ -18,7 +19,7 @@ class _RootScreenState extends State<RootScreen> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const CartScreen(),
-    const HomeScreen(),
+    const FavoriteScreen(),
     const OrderHistoryScreen(),
     const ProfileScreen(),
   ];
@@ -37,7 +38,7 @@ class _RootScreenState extends State<RootScreen> {
         items: const [
           TabItem(icon: Icons.home, title: ''),
           TabItem(icon: Icons.add_shopping_cart, title: ''),
-          TabItem(icon: Icons.center_focus_weak, title: ''),
+          TabItem(icon: Icons.heart_broken, title: ''),
           TabItem(icon: Icons.history, title: ''),
           TabItem(icon: Icons.perm_identity, title: ''),
         ],
