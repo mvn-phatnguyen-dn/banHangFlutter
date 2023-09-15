@@ -1,22 +1,34 @@
 import 'package:final_flutter_project/components/text_field.dart';
 import 'package:final_flutter_project/screen_routes.dart';
+import 'package:final_flutter_project/screens/login/loginViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:final_flutter_project/network/api_service.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:rxdart/src/subjects/behavior_subject.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../common/shared_preferences_service.dart';
+import '../../base/base_page.dart';
+import '../../common/shared_preferences_service.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends BasePage<LoginViewModel> {
+  const LoginScreen({
+    super.key,
+    required super.viewModel,
+  });
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends BasePageState<LoginScreen> {
+  LoginViewModel get _viewModel => widget.viewModel;
+
+  @override
+  void bind() {
+    // TODO: implement bind
+  }
+
   ApiService apiService = ApiService(dio.Dio());
 
-  bool obscureText = false;
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final SharedPreferences prefs = SharedPreferencesService().prefs;
@@ -156,11 +168,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 suffixIcon: GestureDetector(
                   onTap: () {
                     setState(() {
-                      obscureText = !obscureText;
+                      _viewModel.obscureText.value =
+                          !_viewModel.obscureText.value;
                     });
                   },
                   child: Icon(
-                    obscureText
+                    _viewModel.obscureText.value
                         ? Icons.visibility_off_outlined
                         : Icons.visibility_outlined,
                     color: Colors.white,
@@ -182,7 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
               style: const TextStyle(
                 color: Colors.white,
               ),
-              obscureText: obscureText,
+              obscureText: _viewModel.obscureText.value,
             ),
           ),
           Padding(
