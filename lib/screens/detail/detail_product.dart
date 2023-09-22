@@ -3,22 +3,25 @@ import 'package:final_flutter_project/network/entity/product_entity.dart';
 import 'package:final_flutter_project/screen_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as dio;
-import '../network/api_service.dart';
-import '../network/response/add_to_cart_input_model.dart';
+import '../../base/base_page.dart';
+import '../../network/api_service.dart';
+import '../../network/response/add_to_cart_input_model.dart';
+import 'detail_product_viewmodel.dart';
 
-class DetailProductScreen extends StatefulWidget {
-  const DetailProductScreen({super.key});
+class DetailProductScreen extends BasePage<DetailViewModel> {
+  const DetailProductScreen({super.key, required super.viewModel});
 
   @override
   State<DetailProductScreen> createState() => _DetailProductScreenState();
 }
 
-class _DetailProductScreenState extends State<DetailProductScreen> {
+class _DetailProductScreenState extends BasePageState<DetailProductScreen> {
   final _searchplantController = TextEditingController();
   late ProductEntity item;
   int numberProducts = 1;
 
   ApiService apiService = ApiService(dio.Dio());
+  DetailViewModel get _viewModel => widget.viewModel;
 
   Future<void> _addToCart() async {
     try {
@@ -291,6 +294,11 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void bind() {
+    // TODO: implement bind
   }
 }
 

@@ -1,16 +1,18 @@
 import 'package:final_flutter_project/network/entity/cart_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as dio;
-import '../network/api_service.dart';
+import '../../base/base_page.dart';
+import '../../network/api_service.dart';
+import 'cart_screen_viewmodel.dart';
 
-class CartScreen extends StatefulWidget {
-  const CartScreen({super.key});
+class CartScreen extends BasePage<CartViewModel> {
+  const CartScreen({super.key, required super.viewModel});
 
   @override
   State<CartScreen> createState() => _CartScreenState();
 }
 
-class _CartScreenState extends State<CartScreen> {
+class _CartScreenState extends BasePageState<CartScreen> {
   ApiService apiService = ApiService(dio.Dio());
   List<CartEntity> data = [];
   int totalAmount = 0;
@@ -496,6 +498,11 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void bind() {
+    // TODO: implement bind
   }
 }
 

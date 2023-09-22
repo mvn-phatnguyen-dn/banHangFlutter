@@ -1,10 +1,13 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:final_flutter_project/screens/cart_screen.dart';
+import 'package:final_flutter_project/screens/cart/cart_screen.dart';
 import 'package:final_flutter_project/screens/favorite_screen.dart';
-import 'package:final_flutter_project/screens/home_screen.dart';
+import 'package:final_flutter_project/screens/home/home_screen.dart';
 import 'package:final_flutter_project/screens/order_history_screen.dart';
 import 'package:final_flutter_project/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
+
+import 'cart/cart_screen_viewmodel.dart';
+import 'home/home_viewmodel.dart';
 
 class RootScreen extends StatefulWidget {
   const RootScreen({super.key});
@@ -17,8 +20,8 @@ class _RootScreenState extends State<RootScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    const HomeScreen(),
-    const CartScreen(),
+    HomeScreen(viewModel: HomeViewModel()),
+    CartScreen(viewModel: CartViewModel()),
     const FavoriteScreen(),
     const OrderHistoryScreen(),
     const ProfileScreen(),

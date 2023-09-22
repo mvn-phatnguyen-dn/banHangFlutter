@@ -3,11 +3,13 @@ import 'package:final_flutter_project/screen_routes.dart';
 import 'package:final_flutter_project/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as dio;
-import '../network/api_service.dart';
-import '../network/entity/product_entity.dart';
+import '../../base/base_page.dart';
+import '../../network/api_service.dart';
+import '../../network/entity/product_entity.dart';
+import 'home_viewmodel.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends BasePage<HomeViewModel> {
+  const HomeScreen({super.key, required super.viewModel});
 
   @override
   State<HomeScreen> createState() {
@@ -15,10 +17,11 @@ class HomeScreen extends StatefulWidget {
   }
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends BasePageState<HomeScreen> {
   final _searchplantController = TextEditingController();
   List<ProductEntity> listProduct = [];
   ApiService apiService = ApiService(dio.Dio());
+  HomeViewModel get _viewModel => widget.viewModel;
 
   Future<void> _getInfoUser() async {
     try {
@@ -458,6 +461,11 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void bind() {
+    // TODO: implement bind
   }
 }
 
